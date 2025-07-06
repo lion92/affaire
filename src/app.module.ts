@@ -1,11 +1,13 @@
-import {Module} from '@nestjs/common';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
-import {TypeOrmModule} from '@nestjs/typeorm';
-import {ConnectionModule} from './connection/connection.module';
-import {JwtModule} from '@nestjs/jwt';
-import {MulterModule} from '@nestjs/platform-express';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConnectionModule } from './connection/connection.module';
+import { JwtModule } from '@nestjs/jwt';
+import { MulterModule } from '@nestjs/platform-express';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DealModule } from './deal/deal.module';
+import { CategoryModule } from './category/category.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,7 +16,9 @@ dotenv.config();
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-    MulterModule.register({ dest: './uploads' }),
+    MulterModule.register({
+      dest: './uploads',
+    }),
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -39,7 +43,10 @@ dotenv.config();
         signOptions: { expiresIn: '1d' },
       }),
     }),
+
     ConnectionModule,
+    DealModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

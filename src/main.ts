@@ -10,7 +10,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     allowedHeaders: '*',
-    origin: '*',
+    origin: 'http://localhost:5173',
     credentials: true,
   });
   const config = new DocumentBuilder()
