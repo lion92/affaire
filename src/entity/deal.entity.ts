@@ -1,5 +1,6 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import {Category} from "./category.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Category } from './category.entity';
+
 @Entity('deals')
 export class Deal {
     @PrimaryGeneratedColumn()
@@ -27,5 +28,9 @@ export class Deal {
     createdAt: Date;
 
     @ManyToOne(() => Category, (category) => category.deals, { eager: true, nullable: true })
+    @JoinColumn({ name: 'categoryId' }) // Ajout indispensable
     category: Category;
+
+    @Column({ nullable: true })
+    categoryId: number; // Ajout indispensable si tu veux accéder directement à l'ID
 }
