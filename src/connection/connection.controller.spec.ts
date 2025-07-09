@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ConnectionController } from './connection.controller';
+import {Test, TestingModule} from '@nestjs/testing';
+import {ConnectionController} from './connection.controller';
 
 describe('ConnectionController', () => {
   let controller: ConnectionController;

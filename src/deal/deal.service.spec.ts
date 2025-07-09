@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Deal } from '../entity/deal.entity';
-import { DealService } from './deal.service';
-import { NotFoundException } from '@nestjs/common';
+import {Test, TestingModule} from '@nestjs/testing';
+import {getRepositoryToken} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Deal} from '../entity/deal.entity';
+import {DealService} from './deal.service';
+import {NotFoundException} from '@nestjs/common';
 
 const mockDeal = {
   id: 1,

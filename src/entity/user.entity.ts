@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {Role} from "./role.entity";
 
 @Entity()
 export class User {
@@ -24,4 +25,9 @@ export class User {
 
   @Column({ nullable: true })
   resetPasswordExpire: Date;
+
+  @ManyToMany(() => Role, { eager: true })
+  @JoinTable()
+  roles: Role[];
+
 }

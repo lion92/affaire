@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Deal } from '../entity/deal.entity';
-import { DealDTO } from '../dto/DealDTO';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Deal} from '../entity/deal.entity';
+import {DealDTO} from '../dto/DealDTO';
 
 @Injectable()
 export class DealService {

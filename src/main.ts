@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import {NestFactory, Reflector} from '@nestjs/core';
+import {AppModule} from './app.module';
 import * as cookieParser from 'cookie-parser';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {JwtAuthGuard} from "./JwtAuthGuard";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,6 +14,8 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
     credentials: true,
   });
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
   const config = new DocumentBuilder()
       .setTitle('Cats example')
       .setDescription('The cats API description')

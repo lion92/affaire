@@ -1,15 +1,15 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { UserDTO } from '../dto/UserDTO';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { User } from '../entity/user.entity';
-import { compare, hash } from 'bcrypt';
-import { LoginDTO } from '../dto/LoginDTO';
-import { JwtService } from '@nestjs/jwt';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {UserDTO} from '../dto/UserDTO';
+import {InjectRepository} from '@nestjs/typeorm';
+import {MoreThan, Repository} from 'typeorm';
+import {User} from '../entity/user.entity';
+import {compare, hash} from 'bcrypt';
+import {LoginDTO} from '../dto/LoginDTO';
+import {JwtService} from '@nestjs/jwt';
 import * as nodemailer from 'nodemailer';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import * as dotenv from 'dotenv';
-import { randomBytes } from 'crypto';
+import {randomBytes} from 'crypto';
 
 dotenv.config();
 
