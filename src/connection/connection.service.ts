@@ -49,7 +49,7 @@ export class ConnectionService {
 
   async login(user: LoginDTO, res): Promise<any> {
     try {
-      const userFind = await this.userRepository.findOneBy({ email: user.email });
+      let userFind = await this.userRepository.findOneBy({ email: user.email });
       if (!userFind) {
         return {
           status: 404,
@@ -74,11 +74,20 @@ export class ConnectionService {
           message: 'Mot de passe incorrect.',
         };
       }
+      userFind = await this.userRepository.findOne({
+        where: { email: user.email },
+        relations: ['roles'], // ← à adapter selon ton entité
+      });
 
+    console.log(userFind.roles.map(r => r.name))
       const jwt = await this.jwtService.signAsync(
-          { id: userFind.id },
-          { secret: process.env.secret },
+          {
+            id: userFind.id,
+            roles: userFind.roles.map(r => r.name), // ← retourne ['admin', 'manager'] par exemple
+          },
+          { secret: process.env.secret }
       );
+
 
       res.cookie('jwt', jwt, { httpOnly: true });
       return {

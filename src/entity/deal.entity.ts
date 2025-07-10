@@ -24,6 +24,15 @@ export class Deal {
     @Column({ default: true })
     isActive: boolean;
 
+    @Column({ default: false })
+    managerValidated: boolean;
+
+    @Column({ default: false })
+    adminValidated: boolean;
+
+    @Column({ default: false })
+    published: boolean;
+
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
