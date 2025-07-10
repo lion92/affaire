@@ -11,6 +11,7 @@ import {CategoryModule} from './category/category.module';
 import {RoleModule} from './role/role.module';
 import {PermissionModule} from './permission/permission.module';
 import * as dotenv from 'dotenv';
+import {UserProfileModule} from "./user-profile/user-profile.module";
 
 dotenv.config();
 
@@ -52,7 +53,8 @@ dotenv.config();
         RoleModule,
         PermissionModule,
         RoleModule,
-        PermissionModule
+        PermissionModule,
+        UserProfileModule
     ],
     controllers: [AppController],
     providers: [AppService],
