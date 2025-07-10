@@ -53,7 +53,6 @@ dotenv.config();
         RoleModule,
         PermissionModule,
         RoleModule,
-        PermissionModule,
         UserProfileModule
     ],
     controllers: [AppController],
