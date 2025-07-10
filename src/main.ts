@@ -8,11 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: console,
   });
-  app.use(cookieParser());
   app.enableCors({
-    allowedHeaders: '*',
-    origin: 'http://localhost:5173',
-    credentials: true,
+    origin: '*', // 🔴 à ne pas utiliser en production !
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));

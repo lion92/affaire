@@ -1,8 +1,9 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
 import {RoleService} from "./role.service";
 import {CreateRoleDTO} from "../dto/createRoleDTO";
 import {AddPermissionDto} from "../dto/AddPermissionDto";
 import {JwtAuthGuard} from "../JwtAuthGuard";
+import {UpdatePermissionDTO} from "../dto/UpdatePermissionDTO";
 
 @Controller('roles')
 export default class RoleController {
@@ -22,4 +23,14 @@ export default class RoleController {
   findAllRoles() {
     return this.rolesService.findAllRoles();
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/permissions')
+  updatePermissions(
+      @Param('id') id: string,
+      @Body() dto: UpdatePermissionDTO,
+  ) {
+    return this.rolesService.updatePermissions(+id, dto.permissionIds);
+  }
+
 }
