@@ -1,5 +1,6 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Category} from './category.entity';
+import {Like} from "./Like.entity";
 
 @Entity('deals')
 export class Deal {
@@ -42,4 +43,7 @@ export class Deal {
 
     @Column({ nullable: true })
     categoryId: number; // Ajout indispensable si tu veux accéder directement à l'ID
+
+    @OneToMany(() => Like, (like) => like.deal)
+    likes: Like[];
 }

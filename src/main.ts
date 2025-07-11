@@ -1,6 +1,5 @@
 import {NestFactory, Reflector} from '@nestjs/core';
 import {AppModule} from './app.module';
-import * as cookieParser from 'cookie-parser';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {JwtAuthGuard} from "./JwtAuthGuard";
 

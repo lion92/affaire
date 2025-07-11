@@ -72,5 +72,14 @@ export class DealController {
   ) {
     return this.dealService.setValidation(id, body.role, body.validated);
   }
+  @Get('with-likes')
+  async findAllWithLikes() {
+    return this.dealService.findAllWithLikeCount();
+  }
+
+  @Get('active-with-likes')
+  async findAllActiveWithLikes() {
+    return this.dealService.findAllActiveWithLikeCount();
+  }
 
 }

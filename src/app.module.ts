@@ -12,6 +12,7 @@ import {RoleModule} from './role/role.module';
 import {PermissionModule} from './permission/permission.module';
 import * as dotenv from 'dotenv';
 import {UserProfileModule} from "./user-profile/user-profile.module";
+import {LikeModule} from './like/like.module';
 
 dotenv.config();
 
@@ -52,8 +53,8 @@ dotenv.config();
         CategoryModule,
         RoleModule,
         PermissionModule,
-        RoleModule,
-        UserProfileModule
+        UserProfileModule,
+        LikeModule,
     ],
     controllers: [AppController],
     providers: [AppService],

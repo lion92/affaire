@@ -1,5 +1,6 @@
-import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Role} from "./role.entity";
+import {Like} from "./Like.entity";
 
 @Entity()
 export class User {
@@ -29,5 +30,8 @@ export class User {
   @ManyToMany(() => Role, { eager: true })
   @JoinTable()
   roles: Role[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 
 }

@@ -11,14 +11,17 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Deal} from '../entity/deal.entity';
 import {DealDTO} from '../dto/DealDTO';
+import {Like} from "../entity/Like.entity";
 
 @Injectable()
 export class DealService {
   constructor(
       @InjectRepository(Deal)
       private readonly dealRepository: Repository<Deal>,
+      @InjectRepository(Like)
+      private readonly likeRepository: Repository<Like>,
   ) {
-  }
+}
 
   async create(createDealDto: DealDTO): Promise<Deal> {
     const deal = this.dealRepository.create({
@@ -131,6 +134,37 @@ export class DealService {
 
     await this.dealRepository.save(deal);
     return deal;
+  }
+
+
+  async findAllWithLikeCount(): Promise<any[]> {
+    const deals = await this.dealRepository.find();
+
+    const dealsWithLikes = await Promise.all(
+        deals.map(async (deal) => {
+          const likeCount = await this.likeRepository.count({
+            where: { deal: { id: deal.id } }
+          });
+          return { ...deal, likeCount };
+        })
+    );
+
+    return dealsWithLikes;
+  }
+
+  async findAllActiveWithLikeCount(): Promise<any[]> {
+    const deals = await this.dealRepository.find({ where: { isActive: true } });
+
+    const dealsWithLikes = await Promise.all(
+        deals.map(async (deal) => {
+          const likeCount = await this.likeRepository.count({
+            where: { deal: { id: deal.id } }
+          });
+          return { ...deal, likeCount };
+        })
+    );
+
+    return dealsWithLikes;
   }
 
 
