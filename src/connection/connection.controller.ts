@@ -123,4 +123,9 @@ export class ConnectionController {
     resetPassword(@Body() body: { token: string, newPassword: string }) {
         return this.connectionService.resetPassword(body.token, body.newPassword);
     }
+
+    @Get()
+    findAll(): Promise<User[]> {
+        return this.userRepository.find();
+    }
 }

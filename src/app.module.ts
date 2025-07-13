@@ -13,6 +13,7 @@ import {PermissionModule} from './permission/permission.module';
 import * as dotenv from 'dotenv';
 import {UserProfileModule} from "./user-profile/user-profile.module";
 import {LikeModule} from './like/like.module';
+import {MessageModule} from "./message/message.module";
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ dotenv.config();
         PermissionModule,
         UserProfileModule,
         LikeModule,
+        MessageModule
     ],
     controllers: [AppController],
     providers: [AppService],
