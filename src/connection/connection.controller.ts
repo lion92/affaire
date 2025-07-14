@@ -94,7 +94,7 @@ export class ConnectionController {
             message: 'success',
         };
     }
-    @UseGuards(JwtAuthGuard)
+    @Public()
     @Get('decrypt/:token')
     async getId(@Param('token') token: string) {
         const decryptToken = await this.jwtService.verifyAsync(token, {secret: process.env.secret});

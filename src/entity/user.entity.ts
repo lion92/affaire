@@ -1,18 +1,30 @@
-import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import {Role} from "./role.entity";
-import {Like} from "./Like.entity";
-import {Message} from "./message.entity";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Role } from './role.entity';
+import { Like } from './Like.entity';
+import { Message } from './message.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   password: string;
+
   @Column({ unique: true })
   email: string;
+
   @Column()
   nom: string;
+
   @Column()
   prenom: string;
 
@@ -35,11 +47,10 @@ export class User {
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 
-  // Relations
+  // ✅ Relations messages
   @OneToMany(() => Message, (message) => message.sender)
   sentMessages: Message[];
 
   @OneToMany(() => Message, (message) => message.receiver)
   receivedMessages: Message[];
-
 }

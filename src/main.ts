@@ -8,10 +8,11 @@ async function bootstrap() {
     logger: console,
   });
   app.enableCors({
-    origin: '*', // 🔴 à ne pas utiliser en production !
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'], // ← ajoute ici
   });
+
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   const config = new DocumentBuilder()
