@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common';
 import {MessageService} from './message.service';
 
 import {Public} from "../public.decorator";
@@ -14,8 +14,8 @@ export class MessageController {
 
     @Post('send')
     @UseGuards(JwtAuthGuard)
-    async sendMessage({req, body}: { req: any, body: any }) {
-        const senderId = req.user.id; // ✅ récupéré depuis le token JWT
+    async sendMessage(@Req() req: any, @Body() body: any) {
+        const senderId = req.user.id; // ✅ récupéré depuis le JWT
         const { receiverId, content } = body;
 
         return this.messageService.sendMessage(senderId, receiverId, content);
