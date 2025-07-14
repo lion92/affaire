@@ -11,7 +11,10 @@ export class Like {
     @ManyToOne(() => User, (user) => user.likes)
     user: User;
 
-    @ManyToOne(() => Deal, (deal) => deal.likes)
+    @ManyToOne(() => Deal, deal => deal.likes, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
     deal: Deal;
 
     @CreateDateColumn()
