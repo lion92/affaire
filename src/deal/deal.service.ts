@@ -12,6 +12,7 @@ import {Repository} from 'typeorm';
 import {Deal} from '../entity/deal.entity';
 import {DealDTO} from '../dto/DealDTO';
 import {Like} from "../entity/Like.entity";
+import {UpdateDealDto} from "../dto/UpdateDealDTO";
 
 @Injectable()
 export class DealService {
@@ -54,10 +55,12 @@ export class DealService {
     if (!deal) {
       throw new NotFoundException(`Deal #${id} not found`);
     }
+
     return deal;
   }
 
-  async update(id: number, updateDealDto: DealDTO): Promise<Deal> {
+  async update(id: number, updateDealDto: UpdateDealDto): Promise<UpdateDealDto> {
+    console.log(updateDealDto)
     const deal = await this.findOne(id);
 
     deal.title = updateDealDto.title ?? deal.title;
@@ -65,7 +68,6 @@ export class DealService {
     deal.imageUrl = updateDealDto.imageUrl ?? deal.imageUrl;
     deal.price = updateDealDto.price ?? deal.price;
     deal.dealUrl = updateDealDto.dealUrl ?? deal.dealUrl;
-    deal.isActive = updateDealDto.isActive ?? deal.isActive;
 
     if (updateDealDto.categoryId !== undefined) {
       deal.categoryId = updateDealDto.categoryId;
@@ -74,7 +76,7 @@ export class DealService {
     return this.dealRepository.save(deal);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     const deal = await this.findOne(id);
     await this.dealRepository.remove(deal);
   }

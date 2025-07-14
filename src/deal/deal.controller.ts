@@ -14,24 +14,25 @@ import { DealService } from './deal.service';
 import { Deal } from '../entity/deal.entity';
 import { JwtAuthGuard } from '../JwtAuthGuard';
 import {AuthGuard} from "@nestjs/passport";
+import {UpdateDealDto} from "../dto/UpdateDealDTO";
 
 @Controller('deals')
 export class DealController {
   constructor(private readonly dealService: DealService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createDealDto: Deal): Promise<Deal> {
     return this.dealService.create(createDealDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll(): Promise<Deal[]> {
     return this.dealService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('active')
   async findAllActive(): Promise<Deal[]> {
     console.log(this.dealService.findAllActive())
@@ -53,8 +54,8 @@ export class DealController {
   @Put(':id')
   update(
       @Param('id', ParseIntPipe) id: number,
-      @Body() updateDealDto: Deal,
-  ): Promise<Deal> {
+      @Body() updateDealDto: UpdateDealDto,
+  ): Promise<UpdateDealDto> {
     return this.dealService.update(id, updateDealDto);
   }
 

@@ -3,6 +3,7 @@ import {PermissionService} from './permission.service';
 import {UpdatePermissionDTO} from "../dto/UpdatePermissionDTO";
 import {CreatePermissionDto} from "../dto/CreatePermissionDto";
 import {JwtAuthGuard} from "../JwtAuthGuard";
+import {AuthGuard} from "@nestjs/passport";
 
 @Controller('permission')
 export class PermissionController {
@@ -12,17 +13,17 @@ export class PermissionController {
   create(@Body() createPermissionDto:  CreatePermissionDto) {
     return this.permissionService.create(createPermissionDto);
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll() {
     return this.permissionService.findAll();
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.permissionService.findOne(+id);
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDTO) {
     return this.permissionService.update(+id, updatePermissionDto);
