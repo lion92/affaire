@@ -2,8 +2,7 @@ import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common
 import {MessageService} from './message.service';
 
 import {Public} from "../public.decorator";
-import {SendMessageDto} from "../dto/SendMessageDTO";
-import {JwtAuthGuard} from "../JwtAuthGuard";
+import {AuthGuard} from "@nestjs/passport";
 
 
 @Public()
@@ -13,15 +12,15 @@ export class MessageController {
     }
 
     @Post('send')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthGuard('jwt'))
     async sendMessage(@Req() req: any, @Body() body: any) {
         const senderId = req.user.id; // ✅ récupéré depuis le JWT
-        const { receiverId, content } = body;
+        const {receiverId, content} = body;
 
         return this.messageService.sendMessage(senderId, receiverId, content);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthGuard('jwt'))
     @Get('conversation/:user1Id/:user2Id')
     async getConversation(
         @Param('user1Id') user1Id: number,
@@ -30,7 +29,7 @@ export class MessageController {
         return this.messageService.getConversation(user1Id, user2Id);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthGuard('jwt'))
     @Get('all')
     async getAllMessages() {
         return this.messageService.getAllMessages();
