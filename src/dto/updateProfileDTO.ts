@@ -1,4 +1,4 @@
-import { IsArray, IsEmail, IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsArray, IsEmail, IsOptional, IsString, IsNumber, IsUrl } from 'class-validator';
 
 export class UpdateUserProfileDto {
     @IsOptional()
@@ -12,6 +12,14 @@ export class UpdateUserProfileDto {
     @IsOptional()
     @IsString()
     prenom?: string;
+
+    @IsOptional()
+    @IsUrl()
+    youtube_profile?: string;
+
+    @IsOptional()
+    @IsUrl()
+    linkedin_profile?: string;
 
     @IsOptional()
     @IsArray()

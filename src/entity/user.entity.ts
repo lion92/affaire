@@ -40,6 +40,12 @@ export class User {
   @Column({ nullable: true })
   resetPasswordExpire: Date;
 
+  @Column({ nullable: true })
+  youtube_profile: string;
+
+  @Column({ nullable: true })
+  linkedin_profile: string;
+
   @ManyToMany(() => Role, { eager: true })
   @JoinTable()
   roles: Role[];

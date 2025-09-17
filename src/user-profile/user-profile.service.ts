@@ -71,6 +71,18 @@ export class UserProfileService {
         });
     }
 
+    async updateProfile(userId: number, data: Partial<User>): Promise<User> {
+        const user = await this.userRepo.findOneBy({ id: userId });
+        if (!user) {
+            throw new NotFoundException('Utilisateur non trouvé');
+        }
+
+        // Mettre à jour uniquement les champs fournis
+        Object.assign(user, data);
+
+        return this.userRepo.save(user);
+    }
+
 
 
 }

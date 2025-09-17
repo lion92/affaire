@@ -95,8 +95,8 @@ export class DealService {
       throw new BadRequestException('Rôle invalide');
     }
 
-    // Met à jour isActive : true seulement si admin ET manager ont validé
-    deal.isActive = deal.managerValidated && deal.adminValidated;
+    // Met à jour isActive : true si admin OU manager ont validé
+    deal.isActive = deal.managerValidated || deal.adminValidated;
 
     return this.dealRepository.save(deal);
   }
@@ -130,7 +130,7 @@ export class DealService {
       throw new BadRequestException('Rôle invalide');
     }
 
-    // Active l'affaire si validée par admin ou manager
+    // Active l'affaire si validée par admin OU manager
     deal.isActive = deal.adminValidated || deal.managerValidated;
 
 

@@ -14,6 +14,7 @@ import * as dotenv from 'dotenv';
 import {UserProfileModule} from "./user-profile/user-profile.module";
 import {LikeModule} from './like/like.module';
 import {MessageModule} from "./message/message.module";
+import {LinksModule} from "./links/links.module";
 
 dotenv.config();
 
@@ -33,7 +34,7 @@ dotenv.config();
                 host: 'localhost',
                 port: 3306,
                 username: 'root',
-                password: '',
+                password: configService.get('psw') || '',
                 database: 'affaire',
                 entities: ['dist/**/*.entity.js'],
                 synchronize: true,
@@ -56,7 +57,8 @@ dotenv.config();
         PermissionModule,
         UserProfileModule,
         LikeModule,
-        MessageModule
+        MessageModule,
+        LinksModule
     ],
     controllers: [AppController],
     providers: [AppService],

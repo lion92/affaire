@@ -13,16 +13,15 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'], // ← ajoute ici
   });
 
-  const reflector = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
   const config = new DocumentBuilder()
-      .setTitle('Cats example')
-      .setDescription('The cats API description')
+      .setTitle('Mon API')
+      .setDescription('Description de l\'API')
       .setVersion('1.0')
-      .addTag('cats')
+      .addBearerAuth() // si tu utilises JWT
       .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
   await console.log('ok');
   await app.listen(3004);
 }

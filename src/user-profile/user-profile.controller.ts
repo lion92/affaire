@@ -24,6 +24,14 @@ export class UserProfileController {
     return this.userProfileService.getUserProfile(req.user.id);
   }
 
+  // 🔧 Mettre à jour son propre profil
+  @Put('me')
+  async updateProfile(@Req() req, @Body() body: UpdateUserProfileDto) {
+    // On ne peut pas changer les rôles via cet endpoint
+    const { roleIds, ...updateData } = body;
+    return this.userProfileService.updateProfile(req.user.id, updateData);
+  }
+
   // 🔍 Récupérer tous les utilisateurs sauf les admins (admin uniquement)
   @Get()
   async getAllUsers(@Req() req) {

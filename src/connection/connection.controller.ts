@@ -3,10 +3,12 @@ import {
     Body,
     Controller,
     Get,
+    Headers,
     Param,
     Post,
     Put,
     Query,
+    Req,
     Res,
     UnauthorizedException, UseGuards,
 } from '@nestjs/common';
@@ -122,6 +124,37 @@ export class ConnectionController {
     @Post('reset-password')
     resetPassword(@Body() body: { token: string, newPassword: string }) {
         return this.connectionService.resetPassword(body.token, body.newPassword);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('me')
+    async getCurrentUser(@Headers('authorization') authHeader: string) {
+        try {
+            if (!authHeader) {
+                throw new UnauthorizedException('No authorization header');
+            }
+
+            const token = authHeader.replace('Bearer ', '');
+            const data = await this.jwtService.verifyAsync(token, {secret: process.env.secret});
+
+            if (!data) {
+                throw new UnauthorizedException('Invalid token');
+            }
+
+            const user = await this.userRepository.findOne({
+                where: { id: data.id },
+                select: ['id', 'nom', 'prenom', 'email']
+            });
+
+            if (!user) {
+                throw new UnauthorizedException('User not found');
+            }
+
+            return user;
+        } catch (e) {
+            console.log(e);
+            throw new UnauthorizedException('Invalid token or user not found');
+        }
     }
 
     @Get()
