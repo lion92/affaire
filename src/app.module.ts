@@ -15,12 +15,18 @@ import {UserProfileModule} from "./user-profile/user-profile.module";
 import {LikeModule} from './like/like.module';
 import {MessageModule} from "./message/message.module";
 import {LinksModule} from "./links/links.module";
+import {JwtStrategy} from "./jwt.strategy";
+import {User} from "./entity/user.entity";
+import { PassportModule } from '@nestjs/passport';
 
 dotenv.config();
 
 @Module({
     imports: [
         ConfigModule.forRoot({isGlobal: true}),
+
+        TypeOrmModule.forFeature([User]),
+        PassportModule.register({ defaultStrategy: 'jwt' }),
 
         MulterModule.register({
             dest: './uploads',
@@ -61,7 +67,7 @@ dotenv.config();
         LinksModule
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, JwtStrategy],
 })
 export class AppModule {
 }

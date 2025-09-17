@@ -7,6 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: console,
   });
+
+  app.setGlobalPrefix('affaire');
+
+  // Set up global JWT auth guard
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
+
   app.enableCors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

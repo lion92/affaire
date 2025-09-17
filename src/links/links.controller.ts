@@ -12,6 +12,7 @@ import {
 import { LinksService } from './links.service';
 import { Link } from '../entity/link.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { Public } from '../public.decorator';
 
 @Controller('links')
 export class LinksController {
@@ -23,7 +24,7 @@ export class LinksController {
     return this.linksService.create(createLinkDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @Public()
   @Get()
   findAll(): Promise<Link[]> {
     return this.linksService.findAll();
@@ -32,6 +33,12 @@ export class LinksController {
   @Get('active')
   findActive(): Promise<Link[]> {
     return this.linksService.findActive();
+  }
+
+  @Public()
+  @Get('public')
+  findPublic(): Promise<Link[]> {
+    return this.linksService.findPublic();
   }
 
   @UseGuards(AuthGuard('jwt'))

@@ -2,6 +2,7 @@ import {Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards
 import {CategoryService} from './category.service';
 import {Category} from '../entity/category.entity';
 import {JwtAuthGuard} from "../JwtAuthGuard";
+import { Public } from '../public.decorator';
 
 @Controller('categories')
 export class CategoryController {
@@ -13,7 +14,7 @@ export class CategoryController {
   create(@Body('name') name: string): Promise<Category> {
     return this.categoryService.create(name);
   }
-  @UseGuards(JwtAuthGuard)
+  @Public()
   @Get()
   findAll(): Promise<Category[]> {
     return this.categoryService.findAll();

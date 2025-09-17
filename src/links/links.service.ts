@@ -45,4 +45,8 @@ export class LinksService {
     await this.linksRepository.update(id, { validated: true });
     return this.findOne(id);
   }
+
+  async findPublic(): Promise<Link[]> {
+    return this.linksRepository.find({ where: { validated: true } });
+  }
 }
