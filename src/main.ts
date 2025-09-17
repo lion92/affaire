@@ -30,7 +30,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await console.log('ok');
-  await app.listen(3004);
+  await app.listen(3011);
 }
 
 bootstrap();
