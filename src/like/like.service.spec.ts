@@ -46,18 +46,19 @@ describe('LikeService', () => {
             save: jest.fn(),
             remove: jest.fn(),
             find: jest.fn(),
+            count: jest.fn(),
           },
         },
         {
           provide: getRepositoryToken(Deal),
           useValue: {
-            findOne: jest.fn(),
+            findOneBy: jest.fn(),
           },
         },
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOne: jest.fn(),
+            findOneBy: jest.fn(),
           },
         },
       ],
@@ -79,65 +80,75 @@ describe('LikeService', () => {
 
   describe('toggleLike', () => {
     it('should add like when user has not liked the deal', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser as User);
-      jest.spyOn(dealRepository, 'findOne').mockResolvedValue(mockDeal as Deal);
-      jest.spyOn(likeRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(likeRepository, 'findOne')
+        .mockResolvedValueOnce(null) // First call - existing like check
+        .mockResolvedValueOnce(mockLike as Like); // Second call - liked status check
+      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(mockUser as User);
+      jest.spyOn(dealRepository, 'findOneBy').mockResolvedValue(mockDeal as Deal);
       jest.spyOn(likeRepository, 'create').mockReturnValue(mockLike as Like);
       jest.spyOn(likeRepository, 'save').mockResolvedValue(mockLike as Like);
+      jest.spyOn(likeRepository, 'count').mockResolvedValue(5);
 
       const result = await service.toggleLike(1, 1);
 
       expect(likeRepository.findOne).toHaveBeenCalledWith({
         where: { user: { id: 1 }, deal: { id: 1 } },
       });
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(dealRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
       expect(likeRepository.create).toHaveBeenCalledWith({
         user: mockUser,
         deal: mockDeal,
       });
       expect(likeRepository.save).toHaveBeenCalled();
-      expect(result).toEqual({ liked: true, message: 'Like ajouté' });
+      expect(result).toEqual({ liked: true, count: 5 });
     });
 
     it('should remove like when user has already liked the deal', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser as User);
-      jest.spyOn(dealRepository, 'findOne').mockResolvedValue(mockDeal as Deal);
-      jest.spyOn(likeRepository, 'findOne').mockResolvedValue(mockLike as Like);
+      jest.spyOn(likeRepository, 'findOne')
+        .mockResolvedValueOnce(mockLike as Like) // First call - existing like check
+        .mockResolvedValueOnce(null); // Second call - liked status check after removal
       jest.spyOn(likeRepository, 'remove').mockResolvedValue(mockLike as Like);
+      jest.spyOn(likeRepository, 'count').mockResolvedValue(3);
 
       const result = await service.toggleLike(1, 1);
 
       expect(likeRepository.remove).toHaveBeenCalledWith(mockLike);
-      expect(result).toEqual({ liked: false, message: 'Like retiré' });
-    });
-
-    it('should throw BadRequestException when user not found', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
-
-      await expect(service.toggleLike(999, 1))
-        .rejects.toThrow(BadRequestException);
-    });
-
-    it('should throw BadRequestException when deal not found', async () => {
-      jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser as User);
-      jest.spyOn(dealRepository, 'findOne').mockResolvedValue(null);
-
-      await expect(service.toggleLike(1, 999))
-        .rejects.toThrow(BadRequestException);
+      expect(result).toEqual({ liked: false, count: 3 });
     });
   });
 
-  describe('getUserLikes', () => {
-    it('should return user likes', async () => {
-      const likes = [mockLike];
-      jest.spyOn(likeRepository, 'find').mockResolvedValue(likes as Like[]);
+  describe('hasUserLiked', () => {
+    it('should return true if user has liked the deal', async () => {
+      jest.spyOn(likeRepository, 'findOne').mockResolvedValue(mockLike as Like);
 
-      const result = await service.getUserLikes(1);
+      const result = await service.hasUserLiked(1, 1);
 
-      expect(likeRepository.find).toHaveBeenCalledWith({
-        where: { user: { id: 1 } },
-        relations: ['deal'],
+      expect(likeRepository.findOne).toHaveBeenCalledWith({
+        where: { user: { id: 1 }, deal: { id: 1 } },
       });
-      expect(result).toEqual(likes);
+      expect(result).toBe(true);
+    });
+
+    it('should return false if user has not liked the deal', async () => {
+      jest.spyOn(likeRepository, 'findOne').mockResolvedValue(null);
+
+      const result = await service.hasUserLiked(1, 1);
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('countLikes', () => {
+    it('should return the number of likes for a deal', async () => {
+      jest.spyOn(likeRepository, 'count').mockResolvedValue(10);
+
+      const result = await service.countLikes(1);
+
+      expect(likeRepository.count).toHaveBeenCalledWith({
+        where: { deal: { id: 1 } },
+      });
+      expect(result).toBe(10);
     });
   });
 });

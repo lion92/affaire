@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { DealService } from './deal.service';
 import { Deal } from '../entity/deal.entity';
 import { Like } from '../entity/Like.entity';
+import { DealDTO } from '../dto/DealDTO';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 describe('DealService', () => {
@@ -60,7 +61,7 @@ describe('DealService', () => {
 
   describe('create', () => {
     it('should create a new deal', async () => {
-      const createDealDto = {
+      const createDealDto: DealDTO = {
         title: 'New Deal',
         description: 'New Description',
         price: 50.00,

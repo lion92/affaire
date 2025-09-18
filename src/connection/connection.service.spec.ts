@@ -8,9 +8,15 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 // Mock des modules externes
-jest.mock('bcrypt');
-jest.mock('nodemailer');
-jest.mock('crypto');
+jest.mock('bcrypt', () => ({
+  hash: jest.fn(),
+  compare: jest.fn(),
+}));
+jest.mock('nodemailer', () => ({
+  createTransporter: jest.fn().mockReturnValue({
+    sendMail: jest.fn(),
+  }),
+}));
 
 describe('ConnectionService', () => {
   let service: ConnectionService;
@@ -78,6 +84,7 @@ describe('ConnectionService', () => {
         nom: 'Doe',
         prenom: 'Jane',
         password: 'password123',
+        isEmailVerified: false,
       };
 
       const mockResponse = {
@@ -116,6 +123,7 @@ describe('ConnectionService', () => {
       const loginDto = {
         email: 'test@example.com',
         password: 'password123',
+        isEmailVerified: true,
       };
 
       const mockResponse = {
@@ -155,6 +163,7 @@ describe('ConnectionService', () => {
       const loginDto = {
         email: 'notfound@example.com',
         password: 'password123',
+        isEmailVerified: true,
       };
 
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(null);
@@ -172,6 +181,7 @@ describe('ConnectionService', () => {
       const loginDto = {
         email: 'test@example.com',
         password: 'password123',
+        isEmailVerified: false,
       };
 
       const unverifiedUser = { ...mockUser, isEmailVerified: false };
@@ -191,6 +201,7 @@ describe('ConnectionService', () => {
       const loginDto = {
         email: 'test@example.com',
         password: 'wrongpassword',
+        isEmailVerified: true,
       };
 
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(mockUser as User);
@@ -249,10 +260,10 @@ describe('ConnectionService', () => {
       jest.spyOn(service as any, 'sendResetPasswordEmail').mockResolvedValue(undefined);
 
       // Mock crypto.randomBytes
-      const mockRandomBytes = jest.fn().mockReturnValue({
+      const crypto = require('crypto');
+      const mockRandomBytes = jest.spyOn(crypto, 'randomBytes').mockReturnValue({
         toString: jest.fn().mockReturnValue('reset-token'),
       });
-      (require('crypto').randomBytes as jest.Mock) = mockRandomBytes;
 
       await service.forgotPassword(email);
 
